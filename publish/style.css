@@ -1,0 +1,55 @@
+ul {
+  /* display: block; */
+  margin-bottom: 10px;
+}
+code {
+  color: #376c45;
+}
+article {
+  text-align: left;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  text-align: center;
+}
+table {
+  border-radius: 20px;
+  overflow: hidden;
+  background: transparent !important;
+}
+table tr {
+  background: transparent !important;
+}
+body table tr td,
+body table tr th {
+  background: rgba(255, 255, 255, 0.671);
+  font-size: 16px;
+  padding: 12px 8px;
+  line-height: 1.5;
+  border-bottom: 0px solid transparent;
+}
+
+/* 自定义样式*/
+.express-img {
+  position: absolute;
+  left: -20%;
+  top: 1%;
+  height: 150px;
+  width: 150px;
+}
+.info{
+  position: absolute;
+  right: -30%;
+  bottom: 0;
+}
+.info h3{
+  text-align: left;
+}
+.keywords{
+  width: 120px;
+  display: inline-block;
+  text-align: right;
+}

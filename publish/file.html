@@ -1,0 +1,350 @@
+<!--
+    Powered By nodeppt - This is probably the best web presentation tool so far!
+    version: 1.4.5
+    site: https://github.com/ksky521/nodeppt
+    date: 
+-->
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Express - Node.js Web 应用程序框架 - By 周平</title>
+    <link rel="stylesheet" media="all" href="./css/nodeppt.css">
+    <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="./css/phone.css">
+    
+    <link rel="stylesheet" href="./js/highlight/styles/zenburn.css">
+    <link rel="stylesheet" href="./css/font-awesome.css">
+    
+<link rel="stylesheet" href="./css/theme.dark.css">
+</head>
+<body>
+<div class="slides">
+    <slides id="container">
+        <slide class="slide fill" style="background-image:url('./bg.png')"><section class="slide-wrapper"><article>
+
+<p><h1 style="margin-top: -100px;margin-bottom: 150px;">Express - Node.js Web应用程序框架</h1></p>
+<div class="info">
+<h3><span class="keywords">分享者:</span> 周平 (前端-研发工程师)</h3>
+<h3><span class="keywords">时间:</span> 11月17日 下午5:00-6:00</h3>
+<h3><span class="keywords">地点:</span> 上海图灵会议室(38F)</h3>
+</div><ul class="rollIn">
+<li>什么是Express</li>
+<li>Express与Node.js</li>
+<li>中间件</li>
+<li>路由</li>
+<li>视图</li>
+<li>案例 - 调试</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Express</h1>
+<div class="subSlide"><article>
+<ul>
+<li>Express 是一个基于 <code>Node.js</code> 封装的上层服务框架，它提供了更简洁的API跟使用的新功能。</li>
+<li>它通过中间件和路由让程序的组织管理变的更加容易；它提供了丰富的 HTTP 工具；它让动态视图的渲染变的更加容易；它还定义了一组可拓展标准。</li>
+</ul>
+
+</article></div>
+<div class="subSlide"><article>
+<ul>
+<li><code>优点：</code> 极简 灵活  高度可配置 JavaScript全栈</li>
+<li><code>缺点：</code> 部分功能缺失  不适合CPU密集型应用</li>
+</ul>
+
+</article></div>
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>Express与Node.js</h1>
+<div class="subSlide"><article>
+<h2>-----Node.js</h2>
+<ul>
+<li>Node.js 是一个 JavaScript 代码的运行平台</li>
+<li>JS是脚本语言，脚本语言都需要一个解析器才能运行</li>
+<li>对于写在HTML页面里的JS，浏览器充当了解析器的角色。而对于需要独立运行的JS，NodeJS就是一个解析器</li>
+<li>解析器可以看做是一个运行环境，允许JS定义各种数据结构，进行各种计算，还允许JS使用运行环境提供的内置对象和方法做一些事情。</li>
+</ul>
+
+</article></div>
+<div class="subSlide"><article>
+<h2>-----创建web程序</h2>
+<p><img src="./nodejsweb.png" alt="nodejs" style="width:1000px;height:200px;">
+<br>
+<img src="./expressweb.png" alt="nodejs" style="width:1000px;height:200px;"></p>
+
+</article></div>
+<div class="subSlide"><article>
+<ul>
+<li><code>Node.js</code> 处理请求</li>
+</ul>
+<pre><code class="js">var app = http.createServer(function(request, response) {
+    response.writeHead(200, { &quot;Content-Type&quot;: &quot;text/plain&quot; });
+    response.end(&quot;Hello, world!&quot;);
+});
+</code></pre>
+<ul>
+<li><code>Express</code> 处理请求</li>
+</ul>
+<pre><code class="js">var express = require(&quot;express&quot;);  
+var http = require(&quot;http&quot;);
+var app = express();   
+
+app.use(function(request, response) {  
+    response.writeHead(200, { &quot;Content-Type&quot;: &quot;text/plain&quot; });      
+    response.end(&quot;Hello, World!&quot;);  
+}); 
+
+http.createServer(app).listen(3000);
+</code></pre>
+<blockquote>
+<p>...</p>
+</blockquote>
+
+</article></div>
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>中间件</h1>
+<p><code>中间件</code>与原生的Node处理函数非常类似(接受一个请求并做出响应),但是与原生不同的是,中间件将处理过程进行<code>划分</code>,并且使用多个函数构成一个完整的<code>处理流程</code>
+<img src="./nomid.png" alt="nodejs" style="width:1000px;height:100px;margin-top:10px;">
+<br>
+<img src="./mid.png" alt="nodejs" style="width:1000px;height:200px;"></p>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>中间件</h2>
+<ul>
+<li><code>中间件使用</code> app.use(fn)</li>
+</ul>
+<pre><code class="js">var express = require(&#39;express&#39;);
+var path = require(&#39;path&#39;);
+var logger = require(&#39;morgan&#39;);
+var cookieParser = require(&#39;cookie-parser&#39;);
+var bodyParser = require(&#39;body-parser&#39;);
+var app = express();
+// 一个简单的中间件
+function middleware(req,res,next){
+    // 做该干的事
+
+    // 做完后调用下一个函数
+    next();
+}
+app.use(middleware(req,res,next));
+
+// 记录日志中间件
+app.use(logger(&#39;dev&#39;));
+// 用于解析请求的body体中间件
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+// 解析用户的 cookies中间件
+app.use(cookieParser());
+// 静态文件中间件
+app.use(express.static(path.join(__dirname, &#39;public&#39;)));
+// 错误处理中间件
+app.use(function(err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send(&#39;Something broke!&#39;)
+});
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>express中使用中间件的好处</h1>
+<ul class="rollIn">
+<li>逻辑清楚，层次分明</li>
+<li>便于维护</li>
+<li>可复用</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>路由</h2>
+<ul>
+<li>通过对<code>HTTP方法</code>和<code>URL</code>进行<code>映射</code>来实现对不同请求的分别处理</li>
+</ul>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article>
+<h2>路由特性</h2>
+<ul>
+<li><code>含参的通配路由</code></li>
+</ul>
+<pre><code class="js">// 匹配传入的请求，如：/users/123，/users/horse_ebooks
+  app.get(&quot;/users/:userid&quot;, function(req, res) {
+    // 将userId转换为整型
+    var userId = parseInt(req.params.userid, 10);
+    // ...
+});
+</code></pre>
+<ul>
+<li><code>使用正则表达式匹配路由</code></li>
+</ul>
+<pre><code class="js">app.get(/^\/users\/(\d+)$/, function(req, res) {
+    // 通过序列号接收参数
+    var userId = parseInt(req.params[0], 10);
+    // ...
+});
+</code></pre>
+<ul>
+<li><code>捕获查询参数</code></li>
+</ul>
+<pre><code class="js">app.get(&quot;/search&quot;, function(req, res) {
+    // req.query.q == &quot;javasript-themed burrito&quot;
+    // ...
+});
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>使用Router管理路由</h1>
+<p> <code>app.js</code>入口文件</p>
+<pre><code class="js">var express = require(&quot;express&quot;);
+  var path = require(&quot;path&quot;);
+
+  // 引入 API  Router
+  var apiRouter = require(&quot;./routes/api_router&quot;);
+
+  var app = express();
+  var staticPath = path.resolve(__dirname, &quot;static&quot;);
+  app.use(express.static(staticPath));
+  // API  Router 文件的调用
+  app.use(&quot;/api&quot;, apiRouter);
+  app.listen(3000);
+</code></pre>
+<p> <code>api_router.js</code>路由模块</p>
+<pre><code class="js">var express = require(&quot;express&quot;);
+  var ALLOWED_IPS = [
+      &quot;127.0.0.1&quot;,
+      &quot;123.456.7.89&quot;
+  ];
+  var api  = express.Router();
+  api.use(function(req, res, next) {
+      var userIsAllowed = ALLOWED_IPS.indexOf(req.ip) !== -1;
+      if(!userIsAllowed) {
+          res.status(401).send(&quot;Not authorized!&quot;);
+      } else {
+          next();
+      }
+  });
+  api.get(&quot;/users&quot;, function(req, res) { /* ... */ });
+  api.post(&quot;/users&quot;, function(req, res) { /* ... */ });
+  api.get(&quot;/messages&quot;, function(req, res) { /* ... */ });
+  api.post(&quot;/messages&quot;, function(req, res) { /* ... */ });
+  module.exports = api;
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>视图</h1>
+<pre><code class="js">var express = require(&quot;express&quot;);
+var path = require(&quot;path&quot;);
+var ejs = require(&quot;ejs&quot;);
+var app = express();
+app.locals.appName = &quot;Song Lyrics&quot;;
+//视图引擎（view engine）
+app.set(&quot;view engine&quot;, &quot;ejs&quot;);
+app.set(&quot;views&quot;, path.resolve(__dirname, &quot;views&quot;));
+app.use(function(req, res, next) {
+    res.locals.userAgent = req.headers[&quot;user-agent&quot;];
+    next();
+});
+app.get(&quot;/about&quot;, function(req, res) {
+    res.render(&quot;about&quot;, {
+        currentUser: &quot;india-arie123&quot;
+    });
+});
+app.get(&quot;/contact&quot;, function(req, res) {
+    res.render(&quot;contact.ejs&quot;);
+});
+app.use(function(req, res) {
+    res.status(404);
+    res.render(&quot;404.html&quot;, {
+        urlAttempted: req.url
+    });
+});
+app.listen(3000);
+</code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>案例</h1>
+ <p style="text-align:center"> <a href="http://localhost:3000/" target="_blank">一个小Demo</a></p>
+</article></section></slide>
+<slide class="slide fill" style="background-image:url('./bg.png')"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>谢谢 ！</h1>
+
+</article></section></slide>
+        
+
+        <!-- <slide class="slide logoslide dark nobackground">
+            <article class="flexbox vcenter">
+                <h2 style="color: white;">Powered By nodeppt v1.4.5</h2>
+            </article>
+        </slide> -->
+        <div class="slideTip" id="tip"></div>
+    </slides>
+</div>
+<canvas id="drawBoard" class="draw-board" width="900" height="700"></canvas>
+<div class="progress"><span id="progress"></span></div>
+<div id="_buttons">
+    <div class="_btn-box" id="_btn-box" style="display:none;">
+        <button class="fa fa-arrow-circle-left" id="_btn-prev"></button>
+        <button class="fa fa-arrow-circle-right" id="_btn-next"></button>
+        <button class="fa fa-paint-brush" id="_btn-brush"></button>
+        <button class="fa fa-compress" id="_btn-overview" data-toggle="fa fa-expand"></button>
+    </div>
+    <button class="fa fa-bars" id="_btn-bar"  data-toggle="fa fa-close"></button>
+</div>
+<script src="./js/mixjs/lib/mix.0.3.0.min.js"></script>
+<script>
+    var ASSET_RELATIVE_DIR = ".";
+</script>
+<script>
+var base = location.protocol + '//' + location.host;
+
+var path = (location.pathname + '#').split('/').filter(function(v){
+    return !!v;
+});
+path.pop();
+path = path.join('/');
+if (typeof ASSET_RELATIVE_DIR === 'string') {
+    path = path + '/' + ASSET_RELATIVE_DIR;
+}
+MixJS.config({
+    baseURL: [ base, path, 'js'].join('/')+'/'
+});
+
+</script>
+<script src="./js/mixjs/lib/event/broadcast.js"></script>
+<script src="./js/nodeppt.js"></script>
+<script>
+Slide.init({
+    containerID: 'container',
+    drawBoardID: 'drawBoard',
+    slideClass: '.slide',
+    buildClass: '.build',
+    progressID: 'progress',
+    transition: 'zoomin',
+    width: 1100,
+    dir: './',
+    
+    //打开下面的注释就开启postMessage方式
+    //访问网址127.0.0.1:8080/ppt/demo#client
+    control:{
+        type: 'postMessage',
+        args:{
+            isControl:  false
+        }
+    },
+    
+    tipID: 'tip'
+});
+MixJS.loadJS('highlight/highlight.pack.js',function(){
+    hljs.tabReplace = '  ';
+    hljs.initHighlightingOnLoad();
+});
+</script>
+<link rel="stylesheet" href="./style.css">
+
+<!--placeholder-->
+</body>
+</html>
