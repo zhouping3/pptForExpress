@@ -20,12 +20,12 @@
 <body>
 <div class="slides">
     <slides id="container">
-        <slide class="slide fill" style="background-image:url('./bg.png')"><section class="slide-wrapper"><article class="flexbox vcenter">
+        <slide class="slide fill" style="background-image:url('./img/bg.png')"><section class="slide-wrapper"><article>
 
-<p><h1>Express - Node.js Web应用程序框架</h1></p>
+<p><h1 style="margin-top: -100px;margin-bottom: 150px;">Express - Node.js Web应用程序框架</h1></p>
 <div class="info">
 <h3><span class="keywords">分享者:</span> 周平 (前端-研发工程师)</h3>
-<h3><span class="keywords">时间:</span> 11月17日 下午4:30-5:30</h3>
+<h3><span class="keywords">时间:</span> 11月17日 下午5:00-6:00</h3>
 <h3><span class="keywords">地点:</span> 上海图灵会议室(38F)</h3>
 </div><ul class="rollIn">
 <li>什么是Express</li>
@@ -33,33 +33,44 @@
 <li>中间件</li>
 <li>路由</li>
 <li>视图</li>
+<li>案例 - 调试</li>
 </ul>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>Express</h1>
+<div class="subSlide"><article>
 <ul>
-<li>Express 是一个基于 Node.js 封装的上层服务框架，它提供了更简洁的API跟使用的新功能。</li>
+<li>Express 是一个基于 <code>Node.js</code> 封装的上层服务框架，它提供了更简洁的API跟使用的新功能。</li>
 <li>它通过中间件和路由让程序的组织管理变的更加容易；它提供了丰富的 HTTP 工具；它让动态视图的渲染变的更加容易；它还定义了一组可拓展标准。</li>
 </ul>
 
+</article></div>
+<div class="subSlide"><article>
+<ul>
+<li><code>优点：</code> 极简 灵活  高度可配置 JavaScript全栈</li>
+<li><code>缺点：</code> 部分功能缺失  不适合CPU密集型应用</li>
+</ul>
+
+</article></div>
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>Express与Node.js</h1>
 <div class="subSlide"><article>
 <h2>-----Node.js</h2>
 <ul>
+<li>Node.js 是一个 JavaScript 代码的运行平台</li>
 <li>JS是脚本语言，脚本语言都需要一个解析器才能运行</li>
 <li>对于写在HTML页面里的JS，浏览器充当了解析器的角色。而对于需要独立运行的JS，NodeJS就是一个解析器</li>
-<li>每一种解析器都是一个运行环境，不但允许JS定义各种数据结构，进行各种计算，还允许JS使用运行环境提供的内置对象和方法做一些事情。例如运行在浏览器中的JS的用途是操作DOM，浏览器就提供了document之类的内置对象。而运行在NodeJS中的JS的用途是操作磁盘文件或搭建HTTP服务器，NodeJS就相应提供了fs、http等内置对象。</li>
+<li>解析器可以看做是一个运行环境，允许JS定义各种数据结构，进行各种计算，还允许JS使用运行环境提供的内置对象和方法做一些事情。</li>
 </ul>
 
 </article></div>
 <div class="subSlide"><article>
-<h2>-----Node.js创建web程序</h2>
-<p><img src="./nodejsweb.png" alt="nodejs" style="width:1000px;height:200px;">
+<h2>-----创建web程序</h2>
+<p><img src="./img/nodejsweb.png" alt="nodejs" style="width:1000px;height:200px;">
 <br>
-<img src="./expressweb.png" alt="nodejs" style="width:1000px;height:200px;"></p>
+<img src="./img/expressweb.png" alt="nodejs" style="width:1000px;height:200px;"></p>
 
 </article></div>
 <div class="subSlide"><article>
@@ -86,7 +97,7 @@ app.use(function(request, response) {
 http.createServer(app).listen(3000);
 </code></pre>
 <blockquote>
-<p>多个权限需要对应权限数组相加</p>
+<p>...</p>
 </blockquote>
 
 </article></div>
@@ -94,15 +105,15 @@ http.createServer(app).listen(3000);
 <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
 <h1>中间件</h1>
 <p><code>中间件</code>与原生的Node处理函数非常类似(接受一个请求并做出响应),但是与原生不同的是,中间件将处理过程进行<code>划分</code>,并且使用多个函数构成一个完整的<code>处理流程</code>
-<img src="./nomid.png" alt="nodejs" style="width:1000px;height:100px;margin-top:10px;">
+<img src="./img/nomid.png" alt="nodejs" style="width:1000px;height:100px;margin-top:10px;">
 <br>
-<img src="./mid.png" alt="nodejs" style="width:1000px;height:200px;"></p>
+<img src="./img/mid.png" alt="nodejs" style="width:1000px;height:200px;"></p>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><article>
 <h2>中间件</h2>
 <ul>
-<li><code>中间件</code> 代码示例</li>
+<li><code>中间件使用</code> app.use(fn)</li>
 </ul>
 <pre><code class="js">var express = require(&#39;express&#39;);
 var path = require(&#39;path&#39;);
@@ -110,23 +121,39 @@ var logger = require(&#39;morgan&#39;);
 var cookieParser = require(&#39;cookie-parser&#39;);
 var bodyParser = require(&#39;body-parser&#39;);
 var app = express();
+// 一个简单的中间件
+function middleware(req,res,next){
+    // 做该干的事
+
+    // 做完后调用下一个函数
+    next();
+}
+app.use(middleware(req,res,next));
 
 // 记录日志中间件
 app.use(logger(&#39;dev&#39;));
-
 // 用于解析请求的body体中间件
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 // 解析用户的 cookies中间件
 app.use(cookieParser());
-
 // 静态文件中间件
 app.use(express.static(path.join(__dirname, &#39;public&#39;)));
-.
-.
-.
+// 错误处理中间件
+app.use(function(err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send(&#39;Something broke!&#39;)
+});
 </code></pre>
+
+</article></section></slide>
+<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>express中使用中间件的好处</h1>
+<ul class="rollIn">
+<li>逻辑清楚，层次分明</li>
+<li>便于维护</li>
+<li>可复用</li>
+</ul>
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><article>
@@ -239,693 +266,11 @@ app.listen(3000);
 
 </article></section></slide>
 <slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>使用Router管理路由</h1>
-<div class="subSlide"><article>
-<h2>fs.open</h2>
-<pre><code class="javascript">const fs = require(&#39;fs&#39;)
-// 异步打开
-fs.open(filename, flags, [mode], (err, fd) =&gt; {
-  // fd返回的是一个文件的描述符，是一个数字 
-})
-// 同步打开文件 
-var fs = openSync(filename, flags, [mode])
-</code></pre>
-
-</article></div>
-<div class="subSlide"><article>
-<h2>fs.close</h2>
-<pre><code class="javascript">fs.open(filename, flags, [mode], (err, fd) =&gt; {
-  // fd返回的是一个文件的描述符，是一个数字 
-  fs.close(fd, err =&gt; {})
-})
-</code></pre>
-
-</article></div>
-<div class="subSlide"><article>
-<h2>fs.read</h2>
-<pre><code class="javascript">fs.read(fd, buffer, offset, length, position, callback)
-</code></pre>
-<ul>
-<li><code>fd</code> 文件描述符，是open方法的回调函数中获取到的，是一个数字。</li>
-<li><code>buffer</code> buffer对象，用于指定将文件数据读取到那个缓存区，如果不定义，则会生成一个新的缓存区，进行存放新读取到的数据。</li>
-<li><code>offset</code> 整数，用于指定向缓存区中写入数据时的开始位置，以字节为单位。其实也就是，读入到缓存中的数据，从buffer对象的第几个元素开始写入。</li>
-<li><code>length</code> 整数，表示读入的数据，多少数据写入到buffer对象中去，要保证不能超出buffer的容纳范围，否则会抛出一个范围异常。</li>
-<li><code>position</code> 整数值，表示，从文件中的哪个位置，开始读取数据，如果设置为非0的整数，则从该整数所示的位置，读取长度为length的数据到buffer对象中。</li>
-<li><code>callback</code> 三个参数 err,bytesRead,buffer<ul>
-<li><code>err</code>为读取文件操作失败时，触发的错误对象</li>
-<li><code>bytesRead</code>为读取到的字节数，如果文件的比较大，则该值就是length的值，如果文件的大小比length小，则该值为实际中读取到的字节数。</li>
-<li><code>buffer</code>为读取到的内容，保存到了该缓存区，如果在使用read时，传入了buffer对象，则此处的buffer就是传入的buffer对象。 如果在read时没有传入buffer，则此处的buffer为新创建的buffer对象</li>
-</ul>
-</li>
-</ul>
-
-</article></div>
-<div class="subSlide"><article>
-<pre><code class="javascript">fs.open(&#39;fs.txt&#39;, &#39;r&#39;, function(err, fd) {
-  //读取fs.text，文件的内容为“123456789”，长度为9
-  var buffer = new Buffer([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-  //创建一个长度为10，初始值为0的buffer对象。
-  //数据比较少，就直接写了，否则还是使用fill方法吧。
-  console.log(buffer)
-  //&lt;Buffer 00 00 00 00 00 00 00 00 00 00&gt;
-  //初始时的buffer对象
-
-  fs.read(fd, buffer, 4, 6, 4, function(err, bytesRead, buffer1) {
-    //读取到的数据，从buffer对象的第5个元素开始保存，保存6个字节的元素
-    //读取文件，是从文件的第5个字节开始，因为文件中内容长度为9，
-    //那么，读取到的内容就是56789，所以buffer的最后一位仍然为初始值。
-    //由于想要读取的字节长度为6，但是文件内容过短，只读取了5个字节的有效数据
-    //就到了文件的结尾了，所以，bytesRead的值不是6，而是5。
-    //而buffer对象，为被写入新数据之后的对象。
-    console.log(bytesRead) //5
-    console.log(buffer1)
-    //&lt;Buffer 00 00 00 00 35 36 37 38 39 00&gt;
-    console.log(buffer)
-    //&lt;Buffer 00 00 00 00 35 36 37 38 39 00&gt;
-    //它们俩是完全相同的。其实质是，它们俩占据的内存也是相同的，
-    //它们就是同一个缓存区。
-  })
-})
-</code></pre>
-
-</article></div>
-<div class="subSlide"><article>
-<h2>fs.write</h2>
-<pre><code class="js">// 写入Buffer数据
-fs.write(fd, buffer, offset, length, position, callback)
-// 写入str数据内容
-fs.write(fd, data[, position[, encoding]], callback)
-</code></pre>
-<pre><code class="js">//使用Buffer写入
-fs.open(&#39;sam.js&#39;, &#39;w+&#39;, (err, fd) =&gt; {
-    var buf = new Buffer(&#39;sam&#39;, &#39;utf8&#39;)
-    fs.write(fd, buf, 0, buf.length, 0, (err, bw, buf) =&gt; {
-        fs.close(fd)
-    })
-})
-//直接使用string写入
-fs.open(&#39;sam.js&#39;, &#39;w+&#39;, (err, fd) =&gt; {
-    fs.write(fd, &#39;sam&#39;, &#39;utf8&#39;, 0, (err, bw, buf) =&gt; {
-        fs.close(fd)
-    })
-})
-</code></pre>
-
-</article></div>
-<div class="subSlide"><article>
-<h2>fs.truncate(文件句柄,截断长度,回调函数);</h2>
-<pre><code class="js">fs.ftruncate(fd, 10, err =&gt; {
-
-})
-</code></pre>
-
-</article></div>
-<div class="subSlide"><article>
-<h2>fs.fsync(文件句柄,回调函数);</h2>
-
-</article></div>
+<h1>案例</h1>
+ <p style="text-align:center"> <a href="http://localhost:3000/" target="_blank">一个小Demo</a></p>
 </article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>文件处理</h1>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>读取文件</h2>
-<blockquote>
-<p>read方法,使用来读取已经打开后的文件。 他不用用来进行打开文件操作</p>
-<pre><code class="javascript">fs.readFile(fileName,[options],(err,data) =&gt; {
-  // data为读取成功时，返回的读取信息，该信息的返回格式，是由options对象中的encoding决定 
-})
-</code></pre>
-<p>options格式为{ encoding: &#39;utf-8&#39;, flag: &#39;r&#39; }</p>
-</blockquote>
-<ul>
-<li><code>encoding</code>表示读取文件成功后，返回的数据的编码格式，默认返回格式为buffer对象</li>
-<li><code>flag</code>的值表示是如何读取文件的，支持的参数，与使用fs.open时相同，通常为r，r+着两种方式。</li>
-</ul>
-<pre><code class="javascript">fs.readFile(&#39;test.js&#39;, &#39;utf-8&#39;, (err,data) =&gt; { 
- if (err) { 
-  console.log(&#39;readFile file error&#39;) 
-  return false
- } 
- console.log(data)
-})
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>写入文件</h2>
-<pre><code class="js">fs.writeFile(fileName, data, [options], (err, data) =&gt; {
-  // data
-})
-fs.appendFile(fileName, data, [options], (err, data) =&gt; {
-
-})
-</code></pre>
-<blockquote>
-<p>options同上。</p>
-</blockquote>
-<pre><code class="js">// 代码简短清晰
-// 同步读取文件，容易阻塞
-// 读取大文件时，容易内存溢出
-function copy(src, target) {
-  console.log(target)
-  fs.writeFileSync(target, fs.readFileSync(src))
-}
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>删除文件</h2>
-<pre><code class="js">fs.unlink(fileName, data, [options], (err, data) =&gt; {
-  // data
-})
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>文件属性</h1>
-<div class="subSlide"><article>
-<pre><code class="js">fs.stat(path,callback); 
-//传入的参数是文件路径，和回调函数 
-
-fs.lstat(path,callback); 
-//传入的参数是目录的路径，和回调函数 
-
-fs.fstat(fd,callback); 
-//传入的参数是文件描述符，和回调函数 
-//所以，该方法在readFile时，在open打开文件成功之后，才使用。 
-
-callback(err,stats){ 
-//回调函数的参数是相同的，第一个参数为错误对象，包含错误信息 
-//第二个参数，也就是本篇文章的重点，为一个State对象的实例，包含对应文件的或者目录的相关信息 
-}
-</code></pre>
-
-</article></div>
-<div class="subSlide"><article>
-<ul>
-<li><code>atime</code> 文件数据上次被访问的时间</li>
-<li><code>mtime</code> 文件上次被修改的时间</li>
-<li><code>ctime</code> 文件状态上次改变的时间</li>
-<li><code>birthtime</code>  文件被创建的时间</li>
-<li><code>stats.isFile()</code>    如果是文件返回 true，否则返回 false。</li>
-<li><code>stats.isDirectory()</code>    如果是目录返回 true，否则返回 false。</li>
-<li><code>stats.isBlockDevice()</code>    如果是块设备返回 true，否则返回 false。</li>
-<li><code>stats.isCharacterDevice()</code>    如果是字符设备返回 true，否则返回 false。</li>
-<li><code>stats.isSymbolicLink()</code>         如果是软链接返回 true，否则返回 false。</li>
-<li><code>stats.isFIFO()</code>    如果是FIFO，返回true，否则返回 false。FIFO是UNIX中的一种特殊类型的命令管道。</li>
-<li><code>stats.isSocket()</code>如果是 Socket 返回 true，否则返回 false。</li>
-</ul>
-
-</article></div>
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>目录处理</h1>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>创建目录</h2>
-<pre><code class="js">fs.mkdir(path[, mode(0777)], () =&gt; {})
-</code></pre>
-<blockquote>
-<p>mkdir无法创建多层级目录</p>
-</blockquote>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>读取目录</h2>
-<pre><code class="js">fs.readdir(path, (err, files) =&gt; {
-  // files 为 目录下的文件数组列表。
-})
-</code></pre>
-<pre><code class="js">fs.readdir(&#39;./testDir&#39;, (err, files) =&gt; {
-  if (err) {
-    console.log(err)
-    return
-  }
-  console.log(&#39;files&#39;, files)
-  var count = files.length
-  var results = {}
-  files.forEach(filename =&gt; {
-    fs.readFile(`./testDir/${filename}`, &#39;utf8&#39;, (err, data) =&gt; {
-      results[filename] = data
-      count--
-      if (count &lt;= 0) {
-        // 对所有文件进行处理
-        console.log(&#39;result&#39;, results)
-      }
-    })
-  })
-})
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>删除目录</h2>
-<pre><code class="js">fs.rmdir(path, ()=&gt;{})
-</code></pre>
-<blockquote>
-<p>使用fs.rmdir(path)是有局限性的，只能删除空目录</p>
-</blockquote>
-<pre><code class="js">function rmDirAll(dirpath) {
-  var stats = fs.statSync(dirpath) // 获取当前文件的状态
-  if (stats.isFile()) {
-    // 如果是个文件
-    fs.unlinkSync(dirpath)
-    console.log(`删除成功： ${dirpath}`)
-  } else if (stats.isDirectory()) {
-    // 若当前路径是文件夹，则获取路径下所有的信息，并循环
-    var files = fs.readdirSync(dirpath)
-
-    files.forEach(item =&gt; {
-      var itempath = path.join(dirpath, item)
-      // var itempath = getLastCode(path) == &#39;/&#39; ? path + item : path + &#39;/&#39; + item // 拼接路径
-      var st = fs.statSync(itempath)
-      if (st.isFile()) {
-        fs.unlinkSync(itempath)
-        console.log(`删除成功： ${itempath}`)
-      } else if (st.isDirectory()) {
-        // 当前是文件夹，则递归检索
-        rmDirAll(itempath)
-      }
-    })
-    // 现在可以删除文件夹
-    fs.rmdir(dirpath)
-    console.log(`删除成功： ${dirpath}`)
-  }
-}
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>监听文件</h1>
-<div class="subSlide"><article>
-<p><code>watchfile</code>方法监听一个文件，如果该文件发生变化，就会自动触发回调函数。</p>
-<pre><code class="js">fs.watchFile(filename[, options], (current, previous) =&gt; {
-  // 当前的状态对象和以前的状态对象
-})
-</code></pre>
-<p>[options]</p>
-<ul>
-<li>persistent 表明当文件正在被监视时，进程是否应该继续运行(Default: true)</li>
-<li><p>interval 表示目标应该每隔多少毫秒被轮询 (Default: 5007)</p>
-<p>```js
-const fs = require(&#39;fs&#39;),
-  Event = require(&#39;events&#39;).EventEmitter,
-  event = new Event();</p>
-</li>
-</ul>
-<p>//原始方法getCur
-//原始属性prev
-var watchFile = function(file,interval,cb){
-    var pre,cur;
-    var getPrv = function(file){
-        var stat = fs.statSync(file);
-        return stat;
-    }
-    var getCur = function(file){
-        cur = getPrv(file);
-        console.log(cur,pre);
-        if(cur.mtime.toString()!==pre.mtime.toString()){
-            cb(&#39;change&#39;);
-        }
-        pre = cur; //改变初始状态
-    }
-    var init = (function(){
-        pre = getPrv(file); //首先获取pre
-        event.on(&#39;change&#39;,function(){
-            getCur(file);
-        });
-        setInterval(()=&gt;{
-            event.emit(&#39;change&#39;);
-        },interval);
-    })()
-}
-watchFile(&#39;sam.js&#39;,2000,function(eventname){
-    console.log(eventname);
-})
- ```</p>
-
-</article></div>
-<div class="subSlide"><article>
-<p><code>unwatchfile</code>方法用于解除对文件的监听。</p>
-<pre><code class="js">fs.unwatchFile(filename[, listener])
-</code></pre>
-<p>[listener]</p>
-<ul>
-<li>eventType <string></li>
-<li>filename <string> | <Buffer></li>
-</ul>
-
-</article></div>
-<div class="subSlide"><article>
-<blockquote>
-<p>fs.watch() 比 fs.watchFile 和 fs.unwatchFile 更高效,fs.watch调用的是native API。而fs.watchFile是调用的是fs.stat</p>
-</blockquote>
-<pre><code class="js">fs.watch(filename[, options][, listener])
-</code></pre>
-<p>[options]</p>
-<ul>
-<li>persistent 指明如果文件正在被监视，进程是否应该继续运行。默认 = true</li>
-<li>recursive 指明是否全部子目录应该被监视，或只是当前目录。 适用于当一个目录被指定时，且只在支持的平台（OS X &amp; Windows）。默认 = false</li>
-<li>encoding 指定用于传给监听器的文件名的字符编码。默认 = &#39;utf8&#39;
-[listener]</li>
-<li>eventType 可以是 &#39;rename&#39; 或 &#39;change&#39;</li>
-<li>filename 触发事件的文件的名称</li>
-</ul>
-<blockquote>
-<p>在大多数平台，当一个文件出现或消失在一个目录里时，&#39;rename&#39; 会被触发</p>
-</blockquote>
-
-</article></div>
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>文件流</h1>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>创建读取流</h2>
-<pre><code class="js">fs.createReadStream(path, [options])
-</code></pre>
-<p>[options] </p>
-<ul>
-<li><code>flags</code>指定文件操作，默认&#39;r&#39;,读操作；</li>
-<li><code>encoding</code>指定读取流编码；</li>
-<li><code>autoClose</code>是否读取完成后自动关闭，默认true；</li>
-<li><code>start</code>指定文件开始读取位置；end指定文件开始读结束位置</li>
-</ul>
-<p>读取数据触发事件：</p>
-<ul>
-<li>open      开始读取文件</li>
-<li>readable  数据可读时</li>
-<li>data      数据读取后</li>
-<li>end       数据读取完成时</li>
-<li>error     数据读取错误时</li>
-<li>close     关闭流对象时</li>
-</ul>
-<p>读取数据的对象操作方法：</p>
-<ul>
-<li>read      读取数据方法</li>
-<li>setEncoding   设置读取数据的编</li>
-<li>pause     通知对象众目停止触发data事件</li>
-<li>resume    通知对象恢复触发data事件</li>
-<li>pipe      设置数据通道，将读入流数据接入写入流；</li>
-<li>unpipe    取消通道</li>
-<li>unshift   当流数据绑定一个解析器时，此方法取消解析器</li>
-</ul>
-<pre><code class="js">var rs = fs.createReadStream(__dirname + &#39;/test.txt&#39;, { start: 0, end: 2 })
-//open是ReadStream对象中表示文件打开时事件，
-rs.on(&#39;open&#39;, fd =&gt; {
-  console.log(&#39;开始读取文件&#39;)
-})
-
-rs.on(&#39;data&#39;, data =&gt; {
-  console.log(data.toString())
-})
-
-rs.on(&#39;end&#39;, () =&gt; {
-  console.log(&#39;读取文件结束&#39;)
-})
-rs.on(&#39;close&#39;, () =&gt; {
-  console.log(&#39;文件关闭&#39;)
-})
-
-rs.on(&#39;error&#39;, err =&gt; {
-  console.error(err)
-})
-
-//暂停和回复文件读取；
-rs.on(&#39;open&#39;, () =&gt; {
-  console.log(&#39;开始读取文件&#39;)
-})
-
-rs.pause()
-
-rs.on(&#39;data&#39;, data =&gt; {
-  console.log(data.toString())
-})
-
-setTimeout(() =&gt; {
-  rs.resume()
-}, 2000)
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>创建写入流</h2>
-<pre><code class="js">fs.createWriteStream(path, [options])
-</code></pre>
-<p> [options]</p>
-<ul>
-<li><code>flags</code>:指定文件操作，默认&#39;w&#39;</li>
-<li><code>encoding</code>,指定读取流编码</li>
-<li><code>start</code>指定写入文件的位置</li>
-</ul>
-<p>写入数据触发事件：</p>
-<ul>
-<li>drain            当write方法返回false时，表示缓存区中已经输出到目标对象中，可以继续写入数据到缓存区</li>
-<li>finish           当end方法调用，全部数据写入完成</li>
-<li>pipe             当用于读取数据的对象的pipe方法被调用时</li>
-<li>unpipe           当unpipe方法被调用</li>
-<li>error            当发生错误</li>
-</ul>
-<p>写入数据方法：</p>
-<ul>
-<li>write            用于写入数据<pre><code class="js">/* chunk,  可以为Buffer对象或一个字符串，要写入的数据
-* [encoding],  编码
-* [callback],  写入后回调
-*/
-ws.write(chunk, [encoding], [callback]);
-</code></pre>
-</li>
-<li>end              结束写入，之后再写入会报错；<pre><code class="js">/* [chunk],  要写入的数据
-* [encoding],  编码
-* [callback],  写入后回调
-*/
-ws.end([chunk], [encoding], [callback]);
-</code></pre>
-</li>
-</ul>
-<pre><code class="js">var ws = fs.createWriteStream(__dirname + &#39;/test.txt&#39;, { start: 0 })
-var buffer = new Buffer(&#39;我也喜欢你&#39;)
-ws.write(buffer, &#39;utf8&#39;, (err, buffer) =&gt; {
-  console.log(arguments)
-  console.log(&#39;写入完成，回调函数没有参数&#39;)
-})
-//最后再写入的内容
-ws.end(&#39;再见&#39;)
-</code></pre>
-<pre><code class="js">// createWriteStream方法和createReadStream方法配合，可以实现拷贝大型文件。
-var input = fs.createReadStream(fileName)
-var output = fs.createWriteStream(&#39;./testFile2.txt&#39;)
-
-input.on(&#39;data&#39;, d =&gt; {
-  // 读取数据写入
-  output.write(d)
-})
-input.on(&#39;error&#39;, err =&gt; {
-  throw err
-})
-input.on(&#39;end&#39;, () =&gt; {
-  output.end()
-})
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article>
-<h2>管道实现读写</h2>
-<pre><code class="js">rs.pipe(destination, [options])
-</code></pre>
-<ul>
-<li><code>destination</code> 必须一个可写入流数据对象</li>
-<li><code>[opations]</code> end 默认为true，表示读取完成立即关闭文件；</li>
-</ul>
-<pre><code class="js">// node中支持pipe方法，类似于管道，将读出来的内容通过管道写入到目标文件中
-function copy(src, target) {
-  var rs = fs.createReadStream(src);
-  var ws = fs.createWriteStream(target);
-  rs.pipe(ws);
-  rs.on(&#39;data&#39;, function (data) {
-    console.log(&#39;数据可读&#39;)
-  });
-  rs.on(&#39;end&#39;, function () {
-    console.log(&#39;文件读取完成&#39;);
-    //ws.end(&#39;再见&#39;)
-  });
-}
-copy(&#39;./movie.mkv&#39;, &#39;./new-movie.mkv&#39;)
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>移动/重命名文件或目录</h1>
-<pre><code class="js">fs.rename(oldPath, newPath, callback);
-</code></pre>
-<blockquote>
-<p>新目录/文件的完整路径及名；如果新路径与原路径相同，而只文件名不同，则是重命名</p>
-<pre><code class="js">fs.rename(&#39;./renameFile1.txt&#39;, &#39;./renameFile.txt&#39;, function(err) {
-  if (err) {
-    console.error(err)
-    return
-  }
-  console.log(&#39;重命名成功&#39;)
-})
-</code></pre>
-</blockquote>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>其他操作</h1>
-<pre><code class="js">fs.exists(path, callback)
-</code></pre>
-<pre><code class="js">const outputFolder = &#39;./test&#39;
-if (fs.existsSync(outputFolder)) {
-  console.log(&#39;Removing &#39; + outputFolder)
-  fs.rmdirSync(outputFolder)
-} else {
-  fs.mkdirSync(outputFolder)
-}
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>压缩文件</h1>
-<pre><code class="js">// create a file to stream archive data to.
-var output = fs.createWriteStream(__dirname + &#39;/example.zip&#39;)
-var archive = archiver(&#39;zip&#39;, {
-  zlib: { level: 9 } // Sets the compression level.
-})
-
-// // listen for all archive data to be written
-// // &#39;close&#39; event is fired only when a file descriptor is involved
-output.on(&#39;close&#39;, function() {
-  console.log(archive.pointer() + &#39; total bytes&#39;)
-  console.log(
-    &#39;archiver has been finalized and the output file descriptor has closed.&#39;
-  )
-})
-
-// // This event is fired when the data source is drained no matter what was the data source.
-// // It is not part of this library but rather from the NodeJS Stream API.
-// // @see: https://nodejs.org/api/stream.html#stream_event_end
-// output.on(&#39;end&#39;, function() {
-//   console.log(&#39;Data has been drained&#39;)
-// })
-
-// // good practice to catch warnings (ie stat failures and other non-blocking errors)
-// archive.on(&#39;warning&#39;, function(err) {
-//   if (err.code === &#39;ENOENT&#39;) {
-//     // log warning
-//   } else {
-//     // throw error
-//     throw err
-//   }
-// })
-
-// // good practice to catch this error explicitly
-// archive.on(&#39;error&#39;, function(err) 
-//   throw err
-// })
-
-// // pipe archive data to the file
-// archive.pipe(output)
-
-// // 追加一个文件流
-// var file1 = __dirname + &#39;/fs.md&#39;
-// archive.append(fs.createReadStream(file1), { name: &#39;fs.md&#39; })
-
-// //追加文件
-// archive.file(&#39;./basic.js&#39;, { name: &#39;basic.js&#39; })
-
-// // 追加testDir并重命名为new-subdir
-// archive.directory(&#39;./testDir/&#39;, &#39;new-subdir&#39;)
-
-// // 追加subdir的内容
-// archive.directory(&#39;./testDir/&#39;, false)
-
-// // // append files from a glob pattern
-// // archive.glob(&#39;subdir/*.txt&#39;)
-
-// // finalize the archive (ie we are done appending files but streams have to finish yet)
-// // &#39;close&#39;, &#39;end&#39; or &#39;finish&#39; may be fired right after calling this method so register to them beforehand
-// archive.finalize()
-
-// 解压
-// fs.createReadStream(&#39;./example.zip&#39;).pipe(unzip.Extract({ path: &#39;example&#39; }))
-</code></pre>
-
-</article></section></slide>
-<slide class="slide"><section class="slide-wrapper"><article class="flexbox vcenter">
-<h1>综合实例</h1>
-<pre><code class="js">// 文件夹（目录）的复制不同于文件的复制，文件夹操作时还要考虑操作对象是否存在及操作对象的类型（文件或目录）。
-function copyDir(src, dist, callback) {
-  fs.access(dist, err =&gt; {
-    if (err) {
-      // 目录不存在时创建目录
-      fs.mkdirSync(dist)
-    }
-    _copy(null, src, dist)
-  })
-
-  function _copy(err, src, dist) {
-    if (err) {
-      callback(err)
-    } else {
-      fs.readdir(src, (err, paths) =&gt; {
-        if (err) {
-          callback(err)
-        } else {
-          paths.forEach(name =&gt; {
-            const _src = path.join(src, name)
-            const _dist = path.join(dist, name)
-            fs.stat(_src, (err, stat) =&gt; {
-              if (err) {
-                callback(err)
-              } else {
-                // 判断是文件还是目录
-                if (stat.isFile()) {
-                  fs.writeFileSync(_dist, fs.readFileSync(_src))
-                } else if (stat.isDirectory()) {
-                  // 当是目录是，递归复制
-                  copyDir(_src, _dist, callback)
-                }
-              }
-            })
-          })
-        }
-      })
-    }
-  }
-}
-copyDir(&#39;./testDir&#39;, &#39;./new&#39;, function(err) {
-  if (err) {
-    console.log(err)
-  }
-})
-</code></pre>
-<pre><code class="js">// 实现远程文件下载
-var url = &#39;http://s0.hao123img.com/res/img/logo/logonew.png&#39;
-http.get(url, function(res) {
-  var imgData = &#39;&#39;
-
-  res.setEncoding(&#39;binary&#39;) //一定要设置response的编码为binary否则会下载下来的图片打不开
-
-  res.on(&#39;data&#39;, function(chunk) {
-    imgData += chunk
-  })
-
-  res.on(&#39;end&#39;, function() {
-    console.log(imgData)
-    fs.writeFile(&#39;./logonew.png&#39;, imgData, &#39;binary&#39;, function(err) {
-      if (err) {
-        console.log(&#39;down fail&#39;)
-      }
-      console.log(&#39;down success&#39;)
-    })
-  })
-})
-</code></pre>
+<slide class="slide fill" style="background-image:url('./img/bg.png')"><section class="slide-wrapper"><article class="flexbox vcenter">
+<h1>谢谢 ！</h1>
 
 </article></section></slide>
         
@@ -998,7 +343,7 @@ MixJS.loadJS('highlight/highlight.pack.js',function(){
     hljs.initHighlightingOnLoad();
 });
 </script>
-<link rel="stylesheet" href="./style.css">
+<link rel="stylesheet" href="./css/style.css">
 
 <!--placeholder-->
 </body>
